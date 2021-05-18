@@ -1,21 +1,17 @@
 package application;
 
-import java.util.Locale;
-import java.util.Scanner;
-
-import boardgame.Board;
+import Chess.ChessMatch;
 
 public class Program {
 
 	public static void main(String[] args) {
 		
-		Locale.setDefault(Locale.US);
-		Scanner sc = new Scanner(System.in);
+		ChessMatch chessMatch = new ChessMatch();
 		
-		Board board = new Board(8, 8);
+		/*Função para imprimir as peca*/
+		
+		UI.printBoard(chessMatch.getPieces());
 		
 	
-	
-		sc.close();
 	}
 }

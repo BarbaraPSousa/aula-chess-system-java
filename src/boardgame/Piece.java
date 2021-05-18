@@ -1,7 +1,5 @@
 package boardgame;
 
-import javax.swing.border.Border;
-
 public class Piece {
 
 	protected Position position; /*Como a possição e simples de matriz utilizamos  protected para não ser visivel na cama de xadrez*/
