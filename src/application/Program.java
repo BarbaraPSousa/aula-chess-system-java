@@ -3,6 +3,8 @@ package application;
 import java.util.Locale;
 import java.util.Scanner;
 
+import boardgame.Position;
+
 public class Program {
 
 	public static void main(String[] args) {
@@ -10,16 +12,10 @@ public class Program {
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("Hollo world!");
+		Position pos = new Position(3, 5); // criando OO
 		
-		
-		
-		
-		
-		
-		
+		System.out.println(pos); //Imprimindo posição
+	
 		sc.close();
-
 	}
-
 }
