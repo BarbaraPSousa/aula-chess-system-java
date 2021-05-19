@@ -27,8 +27,9 @@ public class ChessMatch {
 		}
 		return mat;		
 	}
+	
 	private void initialStep() {//responsavel por iniciar a partida de xadrez e coloca a peça no tabuleiro
-		board.placePice(new Rook(board, Color.WHITE), new Position(2, 1));
+		board.placePice(new Rook(board, Color.WHITE),new Position(2, 1));
 		board.placePice(new King(board, Color.BLACK),new Position(0, 4));
 		board.placePice(new King(board, Color.WHITE),new Position(7, 7));
 
