@@ -41,7 +41,7 @@ public class Board {
 		return pieces[position.getRow()][position.getColumn()];
 	}
 
-	public void placePice(Piece piece, Position position) {// informa a posição da peça no tabuleiro
+	public void placePiece(Piece piece, Position position) {// informa a posição da peça no tabuleiro
 		if(thereIsAPiece(position)) {
 			throw new BoardException("There is already a piece on position " + position);
 		}
