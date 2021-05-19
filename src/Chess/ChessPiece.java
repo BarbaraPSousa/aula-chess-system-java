@@ -1,4 +1,5 @@
 //subClass de Piece
+
 package Chess;
 
 import boardgame.Board;

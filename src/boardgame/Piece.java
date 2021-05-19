@@ -14,18 +14,6 @@ public class Piece {
 	protected Board getBoard() { /*não vai ser possivel alterar o taubeiro por isso apenas o metodo get mas protect pois assim somente class e subclass do msm pacote vai acessar o tabuleiro de uma piece*/
 		return board;
 	}
-
-	
-	
-	
-	
-	
-
-
-
-
-
-
 }
 
 

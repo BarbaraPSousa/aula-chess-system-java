@@ -10,8 +10,7 @@ public class Program {
 		
 		/*Função para imprimir as peca*/
 		
-		UI.printBoard(chessMatch.getPieces());
-		
+		UI.printBoard(chessMatch.getPieces());		
 	
 	}
 }
