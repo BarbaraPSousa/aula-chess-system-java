@@ -16,4 +16,9 @@ public class Rook extends ChessPiece{
 	public String toString() {//função é apenas uma letra para entra no tabuleiro
 		return "R";
 	}
+	@Override
+	public boolean[][] possibleMoves() {//movimento da torre basico
+		boolean[][]mat = new boolean[getBoard().getRow()][getBoard().getColumns()];
+		return mat;
+	}
 }

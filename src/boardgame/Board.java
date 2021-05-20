@@ -50,21 +50,18 @@ public class Board {
 
 	}	
 
-	public Piece removePiece(Position position) {
-		if(!positionExists(position)) {
+	public Piece removePiece(Position position) {//removea peca
+		if(!positionExists(position)) {//tratando possivel erro
 			throw new BoardException("Position not the boar");
 		}
-		if(piece(position) == null) {
+		if(piece(position) == null) {//confi. se tem peca na posicao
 			return null;
 		}
-		Piece aux = piece(position);
+		Piece aux = piece(position);//retirando a peca do tabuleiro
 		aux.position = null;
 		pieces[position.getRow()][position.getColumn()] = null;
 		return aux;
 	}
-	
-	
-	/* Metodo que valida se a posição existe */
 
 	private boolean positionExists(int row, int column) {// verifica exixtem a linha e a coluna
 		return row >= 0 && row < rows && column >= 0 && column < columns;

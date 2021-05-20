@@ -38,10 +38,8 @@ public class UI {
 		System.out.print("\033[H\033[2J");
 		System.out.flush();
 	}
-	
-	/*metodo que ler a posição do usuario*/
-	
-	public static ChessPosition readChessPosition(Scanner sc) {		
+		
+	public static ChessPosition readChessPosition(Scanner sc) {/*metodo que ler a posição do usuario*/ 		
 		try {//para evitar qualquer problema de formato
 			String s = sc.nextLine();//lendo a posi.
 			char column = s.charAt(0);//lendo a coluna como caracter

@@ -36,6 +36,9 @@ public class ChessMatch {
 		if(!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on source position");
 		}
+		if(!board.piece(position).isThereAnyPossibleMove()) {//segunda verificação de peça de origem
+			throw new ChessException("There is no piece on source position");
+		}
 	}
 
 	public ChessPiece[][] getPieces() {// metodo vai retorna uma matriz de pecas, correspondente apartida.
