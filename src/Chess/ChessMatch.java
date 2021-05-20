@@ -22,6 +22,7 @@ public class ChessMatch {
 		Position source = sourcePosition.toPosition();
 		Position target = targetPositon.toPosition();
 		ValidateSourcePosition(source); // valid. pos. de origim
+		ValidateTargetPosition(source,target);
 		Piece capturedPice = makeMove(source,target);// res. por mover a peça
 		return (ChessPiece)capturedPice;//pec era do tipo Pice trocado para chessPiece		
 	}
@@ -32,12 +33,18 @@ public class ChessMatch {
 		return capturedPiece;
 	}
 	
-	private void ValidateSourcePosition(Position position) {//metodo de validar se existe uma peca na posição de origem
+	private void ValidateSourcePosition(Position position) {//validar se existe uma peca na posição de origem
 		if(!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on source position");
 		}
 		if(!board.piece(position).isThereAnyPossibleMove()) {//segunda verificação de peça de origem
 			throw new ChessException("There is no piece on source position");
+		}
+	}
+	
+	private void ValidateTargetPosition(Position source, Position target) {//valida se pos. de destino é valid. em relacao de origim
+		if(!board.piece(source).possibleMove(target)) {//se para peca de origim n for movimento possivel, n pode mexe p/ posicao
+			throw new ChessException("The chosen piece can't move to target position");			
 		}
 	}
 
