@@ -3,8 +3,6 @@
 
 package Chess;
 
-
-
 import Chess.pieces.King;
 import Chess.pieces.Rook;
 import boardgame.Board;
@@ -27,16 +25,16 @@ public class ChessMatch {
 		Piece capturedPice = makeMove(source,target);// res. por mover a peça
 		return (ChessPiece)capturedPice;//pec era do tipo Pice trocado para chessPiece		
 	}
-	private Piece makeMove(Position source,Position target) {//metodo de realizar movimento
+	private Piece makeMove(Position source,Position target) {//metodo de realizar movimento da peça
 		Piece p = board.removePiece(source);
 		Piece capturedPiece = board.removePiece(target);
 		board.placePice(p, target);
 		return capturedPiece;
 	}
 	
-	private void ValidateSourcePosition(Position position) {
+	private void ValidateSourcePosition(Position position) {//metodo de validar se existe uma peca na posição de origem
 		if(!board.thereIsAPiece(position)) {
-			throw new ChessException(null);
+			throw new ChessException("There is no piece on source position");
 		}
 	}
 
