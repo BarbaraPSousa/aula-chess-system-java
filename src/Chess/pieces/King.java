@@ -18,7 +18,7 @@ public class King extends ChessPiece {
 		return "k";
 	}
 	
-	private boolean canMove(Position position) {//metodo para verificar se o rei pode move p/ determinada posicao
+	private boolean canMove(Position position) {//metodo para verificar se o rei pode move p/ determ
 		ChessPiece p = (ChessPiece)getBoard().piece(position);
 		return p == null || p.getColor() != getColor();
 	}

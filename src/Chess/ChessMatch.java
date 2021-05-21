@@ -10,12 +10,23 @@ import boardgame.Piece;
 import boardgame.Position;
 
 public class ChessMatch {
-
+	
+	private int turn;
+	private Color currentPlay;
 	private Board board;
 
 	public ChessMatch() {// informando o tamanho do tabuleiro a class em questão 
 		board = new Board(8, 8);
+		turn = 1;
+		currentPlay = Color.WHITE;
 		initialStep();
+	}
+	
+	public int getTurn() {
+		return turn;
+	}
+	public Color getCurrentPlay() {
+		return currentPlay;
 	}
 	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPositon) {//metodo do movimento do xadrez
@@ -24,6 +35,7 @@ public class ChessMatch {
 		ValidateSourcePosition(source); // valid. pos. de origim
 		ValidateTargetPosition(source,target);
 		Piece capturedPice = makeMove(source,target);// res. por mover a peça
+		nexTurn();//troca o turno
 		return (ChessPiece)capturedPice;//pec era do tipo Pice trocado para chessPiece		
 	}
 	private Piece makeMove(Position source,Position target) {//metodo de realizar movimento da peça
@@ -32,20 +44,31 @@ public class ChessMatch {
 		board.placePice(p, target);
 		return capturedPiece;
 	}
-	
-	private void ValidateSourcePosition(Position position) {//validar se existe uma peca na posição de origem
-		if(!board.thereIsAPiece(position)) {
+
+	private void ValidateSourcePosition(Position position) {// validar se existe uma peca na posição de origem
+
+		if (!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on source position");
 		}
-		if(!board.piece(position).isThereAnyPossibleMove()) {//segunda verificação de peça de origem
+		if (currentPlay != ((ChessPiece) board.piece(position)).getColor()) {
+			throw new ChessException("The chosen piece is not yours");
+		}
+		if (!board.piece(position).isThereAnyPossibleMove()) {// segunda verificação de peça de origem
 			throw new ChessException("There is no piece on source position");
 		}
 	}
-	
-	private void ValidateTargetPosition(Position source, Position target) {//valida se pos. de destino é valid. em relacao de origim
-		if(!board.piece(source).possibleMove(target)) {//se para peca de origim n for movimento possivel, n pode mexe p/ posicao
-			throw new ChessException("The chosen piece can't move to target position");			
+
+	private void ValidateTargetPosition(Position source, Position target) {// valida se pos. de destino é valid. em
+																			// relacao de origim
+		if (!board.piece(source).possibleMove(target)) {// se para peca de origim n for movimento possivel, n pode mexe
+														// p/ posicao
+			throw new ChessException("The chosen piece can't move to target position");
 		}
+	}
+	
+	private void nexTurn() {//metodo de troca de turno
+		turn++;
+		currentPlay = (currentPlay == Color.WHITE) ? Color.BLACK : Color.WHITE;// se jp for igual a branco então agora vai ser branco, caso contrario vai ser branco
 	}
 
 	public ChessPiece[][] getPieces() {// metodo vai retorna uma matriz de pecas, correspondente apartida.

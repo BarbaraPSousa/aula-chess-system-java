@@ -15,11 +15,10 @@ public class Program {
 		Scanner sc = new Scanner(System.in);		
 		ChessMatch chessMatch = new ChessMatch();
 		
-		
 		while (true) {//sem logica de partida ainda, ele vai ficar repetindo temporariamente
 			try {
 			UI.clearScreen();
-			UI.printBoard(chessMatch.getPieces());
+			UI.printMatch(chessMatch);
 			System.out.println();
 			System.out.println();
 			
@@ -28,7 +27,7 @@ public class Program {
 			
 			boolean[][] possibleMoves = chessMatch.possibleMoves(source);//chamando tabuleiro
 			UI.clearScreen();//limpando tela
-			UI.printBoard(chessMatch.getPieces(), possibleMoves);//sobrecarga de metodo, para imprimi o taubieiro e pinta os possiveis movimentos q peca pode mover
+			UI.printBoard(chessMatch.getPieces(),possibleMoves);//sobrecarga de metodo, para imprimi o taubieiro e pinta os possiveis movimentos q peca pode mover
 			
 			System.out.println();
 			System.out.println();
