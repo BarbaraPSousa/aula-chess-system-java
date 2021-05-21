@@ -1,50 +1,56 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import Chess.ChessException;
 import Chess.ChessMatch;
 import Chess.ChessPiece;
 import Chess.ChessPosition;
+import boardgame.Piece;
 
 public class Program {
 
 	public static void main(String[] args) {
-		
-		Scanner sc = new Scanner(System.in);		
+
+		Scanner sc = new Scanner(System.in);
 		ChessMatch chessMatch = new ChessMatch();
-		
-		while (true) {//sem logica de partida ainda, ele vai ficar repetindo temporariamente
+		List<ChessPiece> captured = new ArrayList<>();
+
+		while (true) {// sem logica de partida ainda, ele vai ficar repetindo temporariamente
 			try {
-			UI.clearScreen();
-			UI.printMatch(chessMatch);
-			System.out.println();
-			System.out.println();
-			
-			System.out.print("Source: ");
-			ChessPosition source = UI.readChessPosition(sc);//lendo possi. de origim
-			
-			boolean[][] possibleMoves = chessMatch.possibleMoves(source);//chamando tabuleiro
-			UI.clearScreen();//limpando tela
-			UI.printBoard(chessMatch.getPieces(),possibleMoves);//sobrecarga de metodo, para imprimi o taubieiro e pinta os possiveis movimentos q peca pode mover
-			
-			System.out.println();
-			System.out.println();
-			System.out.print("Target: ");
-			ChessPosition target = UI.readChessPosition(sc);//lendo poss. de destino
-			
-			ChessPiece capturdChessPiece = chessMatch.performChessMove(source, target);//chamada de movimento
-		}
-		catch (ChessException e) {
-			System.out.println(e.getMessage());
-			sc.nextLine();
-		}
-		catch(InputMismatchException e) {
-			System.out.println(e.getMessage());
-			sc.hasNextLine();
+				UI.clearScreen();
+				UI.printMatch(chessMatch, captured);
+				System.out.println();
+				System.out.println();
+
+				System.out.print("Source: ");
+				ChessPosition source = UI.readChessPosition(sc);// lendo possi. de origim
+
+				boolean[][] possibleMoves = chessMatch.possibleMoves(source);// chamando tabuleiro
+				UI.clearScreen();// limpando tela
+				UI.printBoard(chessMatch.getPieces(), possibleMoves);
+				System.out.println();
+				System.out.println();
+				System.out.print("Target: ");
+				ChessPosition target = UI.readChessPosition(sc);// lendo poss. de destino
+
+				ChessPiece capturdPiece = chessMatch.performChessMove(source, target);// chamada de movimento
+
+				if (capturdPiece != null) {//add na lista de pecas captura
+					captured.add(capturdPiece);
+				}
+
+			} catch (ChessException e) {
+				System.out.println(e.getMessage());
+				sc.nextLine();
+			} catch (InputMismatchException e) {
+				System.out.println(e.getMessage());
+				sc.hasNextLine();
 			}
-	
+
 		}
 	}
 }

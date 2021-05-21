@@ -3,6 +3,9 @@
 
 package Chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Chess.pieces.King;
 import Chess.pieces.Rook;
 import boardgame.Board;
@@ -14,8 +17,11 @@ public class ChessMatch {
 	private int turn;
 	private Color currentPlay;
 	private Board board;
+	
+	private List<Piece> piecesOnTheBoard = new ArrayList<>();
+	private List<Piece> capturedPieces = new ArrayList<>();
 
-	public ChessMatch() {// informando o tamanho do tabuleiro a class em questão 
+	public ChessMatch() {
 		board = new Board(8, 8);
 		turn = 1;
 		currentPlay = Color.WHITE;
@@ -42,7 +48,12 @@ public class ChessMatch {
 		Piece p = board.removePiece(source);
 		Piece capturedPiece = board.removePiece(target);
 		board.placePice(p, target);
-		return capturedPiece;
+		
+		if(capturedPiece != null) {
+			piecesOnTheBoard.remove(capturedPieces);
+			capturedPieces.add(capturedPiece);		
+		}
+		return capturedPiece;		
 	}
 
 	private void ValidateSourcePosition(Position position) {// validar se existe uma peca na posição de origem
@@ -87,9 +98,9 @@ public class ChessMatch {
 		return board.piece(position).possibleMoves();
 	}
 
-	private void placeNewPiece(char column, int row, ChessPiece piece) {/* operação que passa a na cordenada do xadrez e não matriz*/
-																		
+	private void placeNewPiece(char column, int row, ChessPiece piece) {/* operação que passa a na cordenada do xadrez e não matriz*/																		
 		board.placePice(piece, new ChessPosition(column, row).toPosition());
+		piecesOnTheBoard.add(piece);
 	}
 
 	private void initialStep() {/* res. por iniciar a partida de xadrez e coloca a peça no tabuleiro do xadrez*/
