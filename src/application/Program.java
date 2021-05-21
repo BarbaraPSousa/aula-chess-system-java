@@ -28,8 +28,9 @@ public class Program {
 			
 			boolean[][] possibleMoves = chessMatch.possibleMoves(source);//chamando tabuleiro
 			UI.clearScreen();//limpando tela
-			UI.printBoard(chessMatch.getPieces(), possibleMoves);//sobre carga de metodo, para imprimi os possiveis movimentos
+			UI.printBoard(chessMatch.getPieces(), possibleMoves);//sobrecarga de metodo, para imprimi o taubieiro e pinta os possiveis movimentos q peca pode mover
 			
+			System.out.println();
 			System.out.println();
 			System.out.print("Target: ");
 			ChessPosition target = UI.readChessPosition(sc);//lendo poss. de destino

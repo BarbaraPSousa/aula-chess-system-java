@@ -40,13 +40,13 @@ public class UI {
 	}
 		
 	public static ChessPosition readChessPosition(Scanner sc) {/*metodo que ler a posição do usuario*/ 		
-		try {//para evitar qualquer problema de formato
-			String s = sc.nextLine();//lendo a posi.
-			char column = s.charAt(0);//lendo a coluna como caracter
-			int row = Integer.parseInt(s.substring(1));//recortando a string na posição 1 e convertendo para inteiro
+		try {
+			String s = sc.nextLine();
+			char column = s.charAt(0);
+			int row = Integer.parseInt(s.substring(1));
 			return new ChessPosition(column, row);
 		}
-		catch(RuntimeException e ) {//tratamento de erro
+		catch(RuntimeException e ) {
 			throw new InputMismatchException("Erro reading ChassPosition. Valid values are from a1 to h8");//sig erro de entrada de dados
 		}
 	}
@@ -62,7 +62,7 @@ public class UI {
 		System.out.print("  a b c d e f g h");
 	}
 	
-	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {//imprimir o tabuleiro com o fundo colorido considerando os movimento possiveis.
+	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {//impr. tabul. fundo colorido considerando movi. possiveis
 		for (int i = 0; i < pieces.length; i++) {
 			System.out.print((8 - i) + " ");
 			for (int j = 0; j < pieces.length; j++) {
