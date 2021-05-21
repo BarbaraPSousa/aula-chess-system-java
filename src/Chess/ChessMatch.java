@@ -50,14 +50,18 @@ public class ChessMatch {
 
 	public ChessPiece[][] getPieces() {// metodo vai retorna uma matriz de pecas, correspondente apartida.
 		ChessPiece[][] mat = new ChessPiece[board.getRow()][board.getColumns()];/* criando uma variavel temporaria auxiliar para o programa conhecer apenas a camada xadres e a camada de tabuleiro */
-																				 
-
 		for (int i = 0; i < board.getRow(); i++) {// percorre a linha
 			for (int j = 0; j < board.getColumns(); j++) {// percorre a colina
 				mat[i][j] = (ChessPiece) board.piece(i, j);/* para cada posição i j da matriz mat vai receber recebe umapeca(informa que é uma peça de xadrez)*/
 			}
 		}
 		return mat;
+	}
+	
+	public boolean[][] possibleMoves(ChessPosition sourcePosition){//metodo para imprimi as possicao possiveis, a patir de uma possicao de origem.
+		Position position = sourcePosition.toPosition();
+		ValidateSourcePosition(position);
+		return board.piece(position).possibleMoves();
 	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {/* operação que passa a na cordenada do xadrez e não matriz*/

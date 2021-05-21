@@ -51,27 +51,35 @@ public class UI {
 		}
 	}
 
-	public static void printBoard(ChessPiece[][] pieces) {
-
-		/* Logica para imprimir as posições */
-
-		for (int i = 0; i < pieces.length; i++) {// percorre as linhas
-			System.out.print((8 - i) + " ");// imprime a linha com contagem regrecissa aparti de 8 e espaço
-
-			for (int j = 0; j < pieces.length; j++) {// percorre a coluna (length consideramos que é uma matriz
-														// quadrada)
-				printPiece(pieces[i][j]);// imprime a peca
+	public static void printBoard(ChessPiece[][] pieces) {//imprime sem o fundo colorido.
+		for (int i = 0; i < pieces.length; i++) {
+			System.out.print((8 - i) + " ");
+			for (int j = 0; j < pieces.length; j++) {
+				printPiece(pieces[i][j], false);
 			}
-			System.out.println();// para ter a quebra de linha ao final de cada impreção
+			System.out.println();
 		}
-		System.out.print("  a b c d e f g h");// imprimindo a linha de baixo do tabuleiro
+		System.out.print("  a b c d e f g h");
 	}
-
-	/* logica para imprimir o tabuleiro */
-
-	private static void printPiece(ChessPiece piece) {//metodo trocado para a função para imprimir com a cor
+	
+	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {//imprimir o tabuleiro com o fundo colorido considerando os movimento possiveis.
+		for (int i = 0; i < pieces.length; i++) {
+			System.out.print((8 - i) + " ");
+			for (int j = 0; j < pieces.length; j++) {
+				printPiece(pieces[i][j], possibleMoves[i][j]);
+			}
+			System.out.println();		
+			
+			}
+		System.out.print("  a b c d e f g h");
+	}
+	
+	private static void printPiece(ChessPiece piece, boolean blackgraund) {//metodo vai ou não imprim o fundo de azul dependendo da variavel blacg.
+		if(blackgraund) {
+			System.out.print(ANSI_BLUE_BACKGROUND);
+		}
 		if (piece == null) {
-			System.out.print("-");
+			System.out.print("-" + ANSI_RESET);
 		} else {
 			if (piece.getColor() == Color.WHITE) {
 				System.out.print(ANSI_WHITE + piece + ANSI_RESET);
