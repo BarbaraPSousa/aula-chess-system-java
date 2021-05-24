@@ -1,6 +1,6 @@
 /*Peça Torre*/
 
-package Chess.pieces;//sub class de pecas
+package Chess.pieces;
 
 import Chess.ChessPiece;
 import Chess.Color;
@@ -9,7 +9,7 @@ import boardgame.Position;
 
 public class Rook extends ChessPiece{
 
-	public Rook(Board board, Color color) {//contrutor passa a informação de quem é tabuleiro, peca e cor
+	public Rook(Board board, Color color) {
 		super(board, color);
 	}
 	
