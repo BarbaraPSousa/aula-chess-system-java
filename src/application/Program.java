@@ -18,7 +18,7 @@ public class Program {
 		ChessMatch chessMatch = new ChessMatch();
 		List<ChessPiece> captured = new ArrayList<>();
 
-		while (true) {// sem logica de partida ainda, ele vai ficar repetindo temporariamente
+		while (!chessMatch.getCheckMate()) {// enquanto minha partida não tiver em checkMate
 			try {
 				UI.clearScreen();
 				UI.printMatch(chessMatch, captured);
@@ -49,7 +49,8 @@ public class Program {
 				System.out.println(e.getMessage());
 				sc.hasNextLine();
 			} 
-
-		}
+		}//aconteu um check matri limpa a tela e mostrar a partida finalizada
+		UI.clearScreen();
+		UI.printMatch(chessMatch, captured);
 	}
 }
