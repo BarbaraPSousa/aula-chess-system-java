@@ -68,19 +68,21 @@ public class ChessMatch {
 		return (ChessPiece)capturedPice;//pec era do tipo Pice trocado para chessPiece		
 	}
 	private Piece makeMove(Position source,Position target) {//metodo de realizar movimento da peça
-		Piece p = board.removePiece(source);//tira peca de origem
-		Piece capturedPiece = board.removePiece(target);//tira uma possivel peca cap. na posicao de destino
-		board.placePiece(p, target);//coloca no destino
+		ChessPiece p = (ChessPiece)board.removePiece(source);
+		p.increaseMoveCount();//chamando o metodo de soma conforme movimento
+		Piece capturedPiece = board.removePiece(target);
+		board.placePiece(p, target);
 		
 		if(capturedPiece != null) {//se capturou alguma peca
-			piecesOnTheBoard.remove(capturedPiece);//tira da lista de pca no tabuleiro 
+			piecesOnTheBoard.remove(capturedPiece);
 			capturedPieces.add(capturedPiece);//coloca na lista de peca capturada	
 		}
 		return capturedPiece;		
 	}
 	private void undoMove(Position souce, Position target, Piece capturedPiece	) {// metodo para desfazer movimento
-		Piece p = board.removePiece(target);//tira da peca que moveu do destino
-		board.placePiece(p, souce);//devolve para posicao de origem
+		ChessPiece p = (ChessPiece)board.removePiece(target);
+		p.decreaseMoveCount();//chamando o metdodo de subtracao conforme desfaz movimento
+		board.placePiece(p, souce);
 		
 		if(capturedPiece != null) {//devolvendo a peca no tabuleiro na posicao de destino
 			board.placePiece(capturedPiece, target);
