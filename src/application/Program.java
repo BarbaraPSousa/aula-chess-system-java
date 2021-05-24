@@ -9,7 +9,6 @@ import Chess.ChessException;
 import Chess.ChessMatch;
 import Chess.ChessPiece;
 import Chess.ChessPosition;
-import boardgame.Piece;
 
 public class Program {
 
@@ -49,7 +48,7 @@ public class Program {
 			} catch (InputMismatchException e) {
 				System.out.println(e.getMessage());
 				sc.hasNextLine();
-			}
+			} 
 
 		}
 	}

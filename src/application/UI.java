@@ -61,7 +61,10 @@ public class UI {
 		printCapturedPieces(captured);//imprimindo a captura de pecas
 		System.out.println();		
 		System.out.println("Turn: " + chessMatch.getTurn());
-		System.out.println("Waiting player: " + chessMatch.getCurrentPlay());		
+		System.out.println("Waiting player: " + chessMatch.getCurrentPlay());
+		if (chessMatch.getCheck()) {//caso for necessario vai passa a informação de check
+			System.out.println("CHECK!");
+		}
 	}
 
 	public static void printBoard(ChessPiece[][] pieces) {//imprime sem o fundo colorido.
@@ -105,7 +108,7 @@ public class UI {
 	private static void printCapturedPieces(List<ChessPiece> captured ) {//Metodo imprimir a lista de pecas capturadas
 		List<ChessPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE).collect(Collectors.toList());//filtrando na lista todos que seja branco
 		List<ChessPiece> black = captured.stream().filter(x -> x.getColor() == Color.BLACK).collect(Collectors.toList()); //filtrando na lista todos que seja Pretas
-		
+
 		System.out.println("Captured pieces:");
 		System.out.print("White: ");
 		System.out.print(ANSI_WHITE);

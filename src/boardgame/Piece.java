@@ -1,4 +1,4 @@
-package boardgame;import java.awt.Point;
+package boardgame;
 
 public abstract class Piece {
 

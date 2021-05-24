@@ -5,6 +5,7 @@ package Chess;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import Chess.pieces.King;
 import Chess.pieces.Rook;
@@ -17,6 +18,7 @@ public class ChessMatch {
 	private int turn;
 	private Color currentPlay;
 	private Board board;
+	private boolean check;
 	
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
@@ -34,26 +36,47 @@ public class ChessMatch {
 	public Color getCurrentPlay() {
 		return currentPlay;
 	}
+	public boolean getCheck() {
+		return check;
+	}
 	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPositon) {//metodo do movimento do xadrez
 		Position source = sourcePosition.toPosition();
 		Position target = targetPositon.toPosition();
-		ValidateSourcePosition(source); // valid. pos. de origim
+		ValidateSourcePosition(source); 
 		ValidateTargetPosition(source,target);
-		Piece capturedPice = makeMove(source,target);// res. por mover a peça
-		nexTurn();//troca o turno
+		Piece capturedPice = makeMove(source,target);
+		
+		if(testCheck(currentPlay)) {//testando se jogador atual se colocou em chek
+			undoMove(source, target, capturedPice);//desfazendo movimento
+			throw new ChessException("You can't yourselt in check");//informando para usuario que não pode fazer kovimento
+		}
+		check = (testCheck(opponent(currentPlay))) ? true:false;//se teste check do oponente for vdd partida em check, se folso naõ esta em check
+		
+		
+		nexTurn();
 		return (ChessPiece)capturedPice;//pec era do tipo Pice trocado para chessPiece		
 	}
 	private Piece makeMove(Position source,Position target) {//metodo de realizar movimento da peça
-		Piece p = board.removePiece(source);
-		Piece capturedPiece = board.removePiece(target);
-		board.placePice(p, target);
+		Piece p = board.removePiece(source);//tira peca de origem
+		Piece capturedPiece = board.removePiece(target);//tira uma possivel peca cap. na posicao de destino
+		board.placePiece(p, target);//coloca no destino
 		
-		if(capturedPiece != null) {
-			piecesOnTheBoard.remove(capturedPieces);
-			capturedPieces.add(capturedPiece);		
+		if(capturedPiece != null) {//se capturou alguma peca
+			piecesOnTheBoard.remove(capturedPiece);//tira da lista de pca no tabuleiro 
+			capturedPieces.add(capturedPiece);//coloca na lista de peca capturada	
 		}
 		return capturedPiece;		
+	}
+	private void undoMove(Position souce, Position target, Piece capturedPiece	) {// metodo para desfazer movimento
+		Piece p = board.removePiece(target);//tira da peca que moveu do destino
+		board.placePiece(p, souce);//devolve para posicao de origem
+		
+		if(capturedPiece != null) {//devolvendo a peca no tabuleiro na posicao de destino
+			board.placePiece(capturedPiece, target);
+			capturedPieces.remove(capturedPiece);//retira da lista de peca capt
+			piecesOnTheBoard.add(capturedPiece);//add na lista de peca no tabuleiro
+		}
 	}
 
 	private void ValidateSourcePosition(Position position) {// validar se existe uma peca na posição de origem
@@ -97,9 +120,35 @@ public class ChessMatch {
 		ValidateSourcePosition(position);
 		return board.piece(position).possibleMoves();
 	}
+	
+	private Color opponent(Color color) {//metodo p/ devolver o oponente de uma cor
+		return (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
+	}
+	
+	private ChessPiece king(Color color) {//mmetodo que localiza o rei de uma determinada cor
+		List<Piece> list = piecesOnTheBoard.stream().filter(x -> ((ChessPiece)x).getColor() == color).collect(Collectors.toList());//filtrando a lista
+		for(Piece p : list) {//para cada p na lista 
+			if(p instanceof King) {//se a peca p é uma intancia de rei
+				return (ChessPiece)p;//encontrei o rei
+			}
+		}
+		throw new IllegalStateException("There is no " + color + " King on the board");//não vai ser tratado, pois este erro não pode aparecer.	
+	}
+	
+	private boolean testCheck(Color color) {//testando se o rei esta em check
+		Position kingPosition = king(color).getChessPosition().toPosition();//pegando a posicao do rei em  formato de matriz
+		List<Piece> opponetPiece = piecesOnTheBoard.stream().filter(x -> ((ChessPiece)x).getColor() == opponent(color)).collect(Collectors.toList()); //lista das pecas do oponente desta cor
+		for(Piece p: opponetPiece) {//testando se existe algum  moviemnto possivel na lista que leva a posicao do rei
+			boolean[][] mat = p.possibleMoves();
+			if(mat[kingPosition.getRow()][kingPosition.getColumn()]) {//se peca p na linha e coluna do rei for vedd, rei ta em check
+				return true;
+			}
+		}
+		return false;//se esgota o teste, rei naõ esta em check
+	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {/* operação que passa a na cordenada do xadrez e não matriz*/																		
-		board.placePice(piece, new ChessPosition(column, row).toPosition());
+		board.placePiece(piece, new ChessPosition(column, row).toPosition());
 		piecesOnTheBoard.add(piece);
 	}
 
