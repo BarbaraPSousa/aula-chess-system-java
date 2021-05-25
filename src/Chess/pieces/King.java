@@ -24,7 +24,7 @@ public class King extends ChessPiece {
 	
 	public boolean testRookCastling(Position position) {//testa se a torre esta apta para o rock
 		ChessPiece p = (ChessPiece)getBoard().piece(position);
-		return p != null && p instanceof Rook && p.getColor() == getColor() && p.getMoveCount() == 0;
+		return p != null && p instanceof Rook && p.getColor() == getColor() && p.getMoveCount() == 0;//se a peca for diferente de nulo e se é uma torre e se a cor da torre é igual do rei e se movimento é igual a zero.
 	}
 
 	@Override
@@ -86,16 +86,13 @@ public class King extends ChessPiece {
 			 //Specialmove castling Kingside rook
 			 Position positionT1 = new Position(position.getRow(), position.getColumn() +3);//instanciando a posicao da torre do rei a direita
 			 if(testRookCastling(positionT1)) {//test se nesta posicao realmente tem uma torre liberada para rock 
-				 Position p1 = new Position(position.getRow(), position.getColumn() +1);//verificando 1 casa direita
-				 Position p2 = new Position(position.getRow(), position.getColumn() +2);//verificando 2 casa direita
+				 Position p1 = new Position(position.getRow(), position.getColumn() +1);//verificando 1 casa direita esta vazia
+				 Position p2 = new Position(position.getRow(), position.getColumn() +2);//verificando 2 casa direita esta vazia
 				 if(getBoard().piece(p1) == null && getBoard().piece(p2) == null) {//tes para saber se tem pecas a direita
 					 mat[positionT1.getRow()][position.getColumn() +2] = true;//incluindo na matriz de movimento posivel do rei. 
 				 }			 
 			 }
-			 
-			//#specialmove castling queenside rook
-			 if (getMoveCount() == 0 && !chessMatch.getCheckMate()){//test se o movimento do rei é igual a zero e se partida não esta em check
-				 //Specialmove castling Kingside rook
+				 //Specialmove castling queenside rook
 				 Position positionT2 = new Position(position.getRow(), position.getColumn() -4);//instanciando a posicao da torre do rei a esquedar
 				 if(testRookCastling(positionT2)) {//test se nesta posicao realmente tem uma torre liberada para rock na esquerda
 					 Position p1 = new Position(position.getRow(), position.getColumn() -1);//verificando 1 casa esquerda
@@ -106,7 +103,6 @@ public class King extends ChessPiece {
 					 }
 				 } 
 			}			 
-		 }
 		return mat;
 	}
 
