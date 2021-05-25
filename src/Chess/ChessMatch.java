@@ -81,21 +81,53 @@ public class ChessMatch {
 			piecesOnTheBoard.remove(capturedPiece);
 			capturedPieces.add(capturedPiece);//coloca na lista de peca capturada	
 		}
+		//#specialmove castling kingside rook
+		if(p instanceof King && target.getColumn() == source.getColumn() +2) {//test se movimento é um rock pequeno
+			Position sourceT = new Position(source.getRow(), source.getColumn() +3);//movendo a torre na msm coluna e linha do rei, origem
+			Position targetT = new Position(source.getRow(), source.getColumn() +1);//movendo a torre na msm coluna e linha do rei, destino
+			ChessPiece rook = (ChessPiece)board.removePiece(sourceT);//retirando a torre do local de origem
+			board.placePiece(rook, targetT);//coloca a torre na poicao de destino
+			rook.increaseMoveCount();//movendo a torre, inclemente a contidade de movimento. 				
+		}
+		//#specialmove castling queenside rook
+		if(p instanceof King && target.getColumn() == source.getColumn() -2) {//test se movimento é um rock grande 
+			Position sourceT = new Position(source.getRow(), source.getColumn() -4);//movendo a torre na msm coluna e linha do rei, origem
+			Position targetT = new Position(source.getRow(), source.getColumn() -1);//movendo a torre na msm coluna e linha do rei, destino
+			ChessPiece rook = (ChessPiece)board.removePiece(sourceT);//retirando a torre do local de origem
+			board.placePiece(rook, targetT);//coloca a torre na poicao de destino
+			rook.increaseMoveCount();//movendo a torre, inclementa a contidade de movimento. 				
+		}	
 		return capturedPiece;		
 	}
-	private void undoMove(Position souce, Position target, Piece capturedPiece	) {// metodo para desfazer movimento
+	private void undoMove(Position source, Position target, Piece capturedPiece	) {// metodo para desfazer movimento
 	
 		ChessPiece p = (ChessPiece)board.removePiece(target);
 		p.decreaseMoveCount();//chamando o metdodo de subtracao conforme desfaz movimento
-		board.placePiece(p, souce);
+		board.placePiece(p, source);
 		
 		if(capturedPiece != null) {//devolvendo a peca no tabuleiro na posicao de destino
 			board.placePiece(capturedPiece, target);
 			capturedPieces.remove(capturedPiece);//retira da lista de peca capt
 			piecesOnTheBoard.add(capturedPiece);//add na lista de peca no tabuleiro
 		}
+		//#specialmove castling kingside rook
+				if(p instanceof King && target.getColumn() == source.getRow()  +2) {//test se movimento é um rock pequeno p desfazer
+					Position sourceT = new Position(source.getRow(), source.getColumn() +3);//movendo a torre na msm coluna e linha do rei, origem
+					Position targetT = new Position(source.getRow(), source.getColumn() +1);//movendo a torre na msm coluna e linha do rei, destino
+					ChessPiece rook = (ChessPiece)board.removePiece(targetT);//retirando a torre do local de destino
+					board.placePiece(rook, sourceT);//coloca a torre de volta ao local de origem
+					rook.decreaseMoveCount();//colocando a torre no lugar de volta e decrementando movimento 				
+				}
+				//#specialmove castling queenside rook
+				if(p instanceof King && target.getColumn() == source.getColumn() -2) {//test se movimento é um rock grande p desfazer
+					Position sourceT = new Position(source.getRow(), source.getColumn() -4);//movendo a torre na msm coluna e linha do rei, origem
+					Position targetT = new Position(source.getRow(), source.getColumn() -1);//movendo a torre na msm coluna e linha do rei, destino
+					ChessPiece rook = (ChessPiece)board.removePiece(targetT);//retirando a torre do local de destino
+					board.placePiece(rook, sourceT);//coloca a torre na poicao de destino
+					rook.decreaseMoveCount();//colocando a torre no lugar devolta e decrementando movimento  				
+				}
+		
 	}
-
 	private void ValidateSourcePosition(Position position) {// validar se existe uma peca na posição de origem
 
 		if (!board.thereIsAPiece(position)) {
@@ -200,7 +232,7 @@ public class ChessMatch {
 		placeNewPiece('b', 1, new Knight(board, Color.WHITE));
 		placeNewPiece('c', 1, new Bishop(board, Color.WHITE));
 		placeNewPiece('d', 1, new Queen(board, Color.WHITE));
-		placeNewPiece('e', 1, new King(board, Color.WHITE));
+		placeNewPiece('e', 1, new King(board, Color.WHITE,this));//tem que informa a partida
 		placeNewPiece('f', 1, new Bishop(board, Color.WHITE));
 		placeNewPiece('g', 1, new Knight(board, Color.WHITE));
 		placeNewPiece('h', 1, new Rook(board, Color.WHITE));
@@ -217,7 +249,7 @@ public class ChessMatch {
 		placeNewPiece('b', 8, new Knight(board, Color.BLACK));
 		placeNewPiece('c', 8, new Bishop(board, Color.BLACK));
 		placeNewPiece('d', 8, new Queen(board, Color.BLACK));
-		placeNewPiece('e', 8, new King(board, Color.BLACK));
+		placeNewPiece('e', 8, new King(board, Color.BLACK,this));
 		placeNewPiece('f', 8, new Bishop(board, Color.BLACK));
 		placeNewPiece('g', 8, new Knight(board, Color.BLACK));
 		placeNewPiece('h', 8, new Rook(board, Color.BLACK));
@@ -232,3 +264,4 @@ public class ChessMatch {
 		
 	}
 }
+

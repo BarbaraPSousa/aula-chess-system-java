@@ -14,7 +14,7 @@ public class Queen extends ChessPiece{
 	}
 	
 	@Override//
-	public boolean[][] possibleMoves() {////implementando o movimento da Rainha, a pode mover como o bispo e como a torre
+	public boolean[][] possibleMoves() {//implementando o movimento da Rainha,  pode mover como o bispo e como a torre
 		
 		boolean[][]mat = new boolean[getBoard().getRow()][getBoard().getColumns()];
 		
