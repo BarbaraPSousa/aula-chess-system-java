@@ -40,6 +40,11 @@ public class Program {
 				if (capturdPiece != null) {//add na lista de pecas captura
 					captured.add(capturdPiece);
 				}
+				if(chessMatch.getPromoted() != null) {//test se peca foi promovida
+					System.out.print("Enter piece for promotion (B/N/R/Q): ");//pedindo para usuario digitar a peca
+					String type = sc.nextLine();
+					chessMatch.replacePromotedPiece(type);										
+				}
 
 			} catch (ChessException e) {
 				System.out.println(e.getMessage());
@@ -48,7 +53,7 @@ public class Program {
 				System.out.println(e.getMessage());
 				sc.hasNextLine();
 			} 
-		}//aconteu um check matri limpa a tela e mostrar a partida finalizada
+		}//aconteu um check matriz limpa a tela e mostrar a partida finalizada
 		UI.clearScreen();
 		UI.printMatch(chessMatch, captured);
 	}

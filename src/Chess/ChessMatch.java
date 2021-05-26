@@ -3,6 +3,7 @@
 
 package Chess;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class ChessMatch {
 	private boolean check;
 	private boolean checkMate;
 	private ChessPiece enPassantVulnerable;
+	private ChessPiece promoted;
 
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
@@ -55,29 +57,56 @@ public class ChessMatch {
 	public ChessPiece getEnPassantVulnerable() {
 		return enPassantVulnerable;
 	}
+	
+	public ChessPiece getPromoted() {
+		return promoted;
+	}
+	
+	public ChessPiece[][] getPieces() {// metodo vai retorna uma matriz de pecas, correspondente apartida.
+		ChessPiece[][] mat = new ChessPiece[board.getRow()][board.getColumns()];
+		for (int i = 0; i < board.getRow(); i++) {
+			for (int j = 0; j < board.getColumns(); j++) {
+				mat[i][j] = (ChessPiece) board.piece(i, j);
+			}
+		}
+		return mat;
+	}
 
-	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPositon) {// metodo do
-																									// movimento no
-																									// xadrez
+	public boolean[][] possibleMoves(ChessPosition sourcePosition) {// metodo para imprimi as possicao possiveis, a
+																	// patir de uma possicao de origem.
+		Position position = sourcePosition.toPosition();
+		ValidateSourcePosition(position);
+		return board.piece(position).possibleMoves();
+	}
+
+	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPositon) {											// 																								// xadrez
 		Position source = sourcePosition.toPosition();
 		Position target = targetPositon.toPosition();
 		ValidateSourcePosition(source);
 		ValidateTargetPosition(source, target);
 		Piece capturedPice = makeMove(source, target);
-
+		
 		if (testCheck(currentPlay)) {// testando se jogador atual se colocou em chek
 			undoMove(source, target, capturedPice);// desfazendo movimento
-			throw new ChessException("You can't put yourselt in check");// informando para usuario que não pode fazer
-																		// kovimento
+			throw new ChessException("You can't put yourselt in check");// informando para usuario que não pode fazer																		// kovimento
 		}
 
 		ChessPiece movedPiece = (ChessPiece) board.piece(target);// referencia da peca que se movel
 
+		//#specialmove pormotion
+		promoted = null;//a segura que ta fazendo novo tes
+		if(movedPiece instanceof Pawn) {//tstse peca é Peao chegou 
+			if((movedPiece.getColor() == Color.WHITE && target.getRow() == 0) || (movedPiece.getColor() == Color.BLACK && target.getRow() == 7)){//tst peão n final
+				promoted = (ChessPiece)board.piece(target);//tratamento especial
+				promoted = replacePromotedPiece("Q");//promovendo o Peao p/ outa peca de maior poder padrao é rainha(Q)			
+			}			
+		}		
 		check = (testCheck(opponent(currentPlay))) ? true : false;// testando se oponente ficou em check
 
 		if (testCheckMate(opponent(currentPlay))) {// testando se o jogo acabou
 			checkMate = true;
-		} else {// caso contratio chama o proximo turno e partida continua.
+		} 
+		else {// caso contratio chama o proximo turno e partida continua.
 			nexTurn();
 		}
 
@@ -91,7 +120,32 @@ public class ChessMatch {
 
 		return (ChessPiece) capturedPice;// pec era do tipo Pice trocado para chessPiece
 	}
-
+	
+	public ChessPiece replacePromotedPiece(String type) {//met para troca de do Peao promovido
+		if(promoted == null) {//defesa para informa que não tem peca para promover
+			throw new IllegalStateException("There is no piece to be promoted");//msg informativa 
+		}
+		if(!type.equals("B") && !type.equals("N") && !type.equals("R") && !type.equals("Q")) {//defesa p/ comparar se string é B N R ou Q, digitado pelo usuario
+			throw new InvalidParameterException("Invalid type for promotion");//msg informando que nao pode fazer promocao.			
+		}
+		Position pos = promoted.getChessPosition().toPosition();//pegando posicao de peca promovida
+		Piece p = board.removePiece(pos);//removendo peca da posicao e guardando na variavel p
+		piecesOnTheBoard.remove(p);//excluindo peca p da lista do tabuleiro.
+		
+		ChessPiece newPiece = newPiece(type, promoted.getColor());//instanciando nova peca
+		board.placePiece(newPiece, pos);//colocando a peca na posicao da peca promovida
+		piecesOnTheBoard.add(newPiece);//adicionando na lista a nova peca que criou
+		
+		return newPiece;
+	}
+	
+	private ChessPiece newPiece(String type, Color color) {//metodo p/ auxiliar na instanciacao de uma peca especifica
+		if(type.equals("B")) return new Bishop(board, color);
+		if(type.equals("N")) return new Knight(board, color);
+		if(type.equals("Q")) return new Queen(board, color);
+		return new Rook(board, color);
+	}
+	
 	private Piece makeMove(Position source, Position target) {// metodo de realizar movimento da peça
 		ChessPiece p = (ChessPiece) board.removePiece(source);
 		p.increaseMoveCount();// chamando o metodo de soma conforme movimento
@@ -238,22 +292,6 @@ public class ChessMatch {
 																				// ser branco
 	}
 
-	public ChessPiece[][] getPieces() {// metodo vai retorna uma matriz de pecas, correspondente apartida.
-		ChessPiece[][] mat = new ChessPiece[board.getRow()][board.getColumns()];
-		for (int i = 0; i < board.getRow(); i++) {
-			for (int j = 0; j < board.getColumns(); j++) {
-				mat[i][j] = (ChessPiece) board.piece(i, j);
-			}
-		}
-		return mat;
-	}
-
-	public boolean[][] possibleMoves(ChessPosition sourcePosition) {// metodo para imprimi as possicao possiveis, a
-																	// patir de uma possicao de origem.
-		Position position = sourcePosition.toPosition();
-		ValidateSourcePosition(position);
-		return board.piece(position).possibleMoves();
-	}
 
 	private Color opponent(Color color) {// metodo p/ devolver o oponente de uma cor
 		return (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
