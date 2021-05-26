@@ -42,7 +42,11 @@ public class Program {
 				}
 				if(chessMatch.getPromoted() != null) {//test se peca foi promovida
 					System.out.print("Enter piece for promotion (B/N/R/Q): ");//pedindo para usuario digitar a peca
-					String type = sc.nextLine();
+					String type = sc.nextLine().toUpperCase();//toUp para garantir que letra vai ser maiucula
+					while(!type.equals("B") && !type.equals("N") && !type.equals("R") && !type.equals("Q")) {//test garante que usuario digite as pecas corretas.
+						System.out.print("Enter piece for promotion (B/N/R/Q): ");
+						type = sc.nextLine().toUpperCase();
+					}
 					chessMatch.replacePromotedPiece(type);										
 				}
 
